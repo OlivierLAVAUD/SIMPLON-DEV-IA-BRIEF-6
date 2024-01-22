@@ -1,0 +1,111 @@
+@startuml
+
+class Jeu {
+  - NombreDeJoueurs
+  - ListeDesJoueurs
+  - TypeDeJoueur = {IA, Player, Simulation}
+  - IdentifiantDeJeu
+  - NombreDeTours
+  - NombreDeDes
+  - NombreDeFacesDes
+  - NombreDeLanceParTour
+  - ReglesGenerales
+  - GainsPossibles
+  - ModeleFeuilleDeScore
+  - Objectif
+  - TourActuel
+  + initialiserJeu()
+  + nouvelleJeu()
+  + ajouteJoueur()
+  + supprimeJoueur()
+  + demarrerTourdeJeu()
+  + tourSuivant()
+  + passerAuJoueurSuivant()
+  + terminerJeu()
+  + play_simulation()
+  + play_ia()
+}
+
+class Joueur {
+  - Id
+  - IdentifiantDeConnexion
+  - MotDePasse
+  - IdentifiantDeJeuActuelle
+  - IdentifiantDeFeuilleDeScoreActuelle
+  - ReglesPossiblesActuellesPourLeJoueur
+  - PointsActuels
+  + lancerDes()
+  + choisirDesAConserver()
+  + choisirFigure()
+  + MarquerFigure()
+  + calculerScore()
+}
+
+class TourDeJeu {
+  - DesLances
+  - DesAConserver
+  - CombinaisonSelection
+  - GainsPossibles
+  - GainsRealises
+  - NumeroDeTour
+  - PointsTour
+  + lancerDes()
+  + evaluerScoreFigures()
+  + proposerChoix()
+  + marquerRegle()
+  + decisionJoueur()
+  + calculerScoreJoueur()
+  + attribuerScoreJoueurFeuilledeScore()
+  + calculerScoreFindeTour()
+  + finDeTour()
+}
+
+class FeuilleDeScore {
+  - UpperSection {1, 2, 3, 4, 5, 6}
+  - LowerSection {Yahtzee, Brelan, Carre, FullHouse, PetiteSuite, GrandeSuite, Chance, BonusYahtzee, JokerYahtzee}
+  - TotalScore
+  - Bonus
+  - UpperSectionTotal
+  - LowerSectionTotal
+  - CombinedTotal
+  - GrandTotal
+  - ReglesMarquesActuelles
+  + calculerBonus()
+  + calculerTotal()
+  + calculerCombinedTotal()
+  + calculerGrandTotal()
+  + TermineFeuilledeScore()
+  + verifierRegle()
+}
+
+class TabledeRegles {
+  - numeroRegle
+  - 1 {Nombre de dés affichant la valeur 1(somme des valeurs des dés)}
+  - 2 {Nombre de dés affichant la valeur 2(somme des valeurs des dés)}
+  - 3 {Nombre de dés affichant la valeur 3(somme des valeurs des dés)}
+  - 4 {Nombre de dés affichant la valeur 4(somme des valeurs des dés)}
+  - 5 {Nombre de dés affichant la valeur 5(somme des valeurs des dés)}
+  - 6 {Nombre de dés affichant la valeur 6(somme des valeurs des dés)}
+  - Yahtzee { Tous les dés affichent la même valeur (50 points)}
+  - Brelan { Trois dés affichent la même valeur (Somme des dés)}
+  - Carre { Quatre dés affichent la même valeur (Somme des dés)}
+  - FullHouse { Un brelan et une paire (25 points)}
+  - PetiteSuite { Quatre dés se suivent (30 points)}
+  - GrandeSuite { Cinq dés se suivent (40 points)}
+  - Chance { Somme des dés de n'importe quelle combinaison}
+  - BonusYahtzee { Un Yahtzee supplémentaire après avoir déjà marqué un Yahtzee (100 points)}
+  - JokerYahtzee {Si deux Yahtzee ou plus sont réalisés, le joueur peut utiliser cette combinaison comme une chance}
+  + ajouterRegle()
+  + supprimerRegle()
+}
+
+Jeu --|> Joueur : Joueurs
+Jeu --|> TourDeJeu : Tours
+Jeu --|> TabledeRegles : Regles
+Jeu --|> FeuilleDeScore : FeuillesDeScore
+Joueur --|> FeuilleDeScore : FeuilleDeScore
+Joueur --|> Jeu : JoueDans
+TourDeJeu --|> Joueur : JoueurActuel
+TourDeJeu --|> GainsPossibles : Utilise
+
+@enduml

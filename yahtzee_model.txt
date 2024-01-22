@@ -1,0 +1,141 @@
+Classes :
+
+Jeu :
+Attributs : NombreDeJoueurs, ListeDesJoueurs, TypeDeJoueur={IA,Player,Simulation}
+			IdentifiantDeJeu,
+			NombreDeTours,
+			NombreDeDes, NombreDeFacesDes,
+			NombreDeLanceParTour,
+			ReglesGenerales, GainsPossibles,
+			ModeleFeuilleDeScore
+			Objectif,
+			TourActuel,
+			
+Méthodes :  initialiserJeu(),
+			nouvelleJeu(),
+			ajouteJoueur(), supprimeJoueur(),
+			demarrerTourdeJeu(),
+			tourSuivant(),
+			passerAuJoueurSuivant(),
+			terminerJeu(),
+			play_simulation(),
+			play_ia()
+
+Joueur :
+Attributs : Id, IdentifiantDeConnexion, MotDePasse,
+			IdentifiantDeJeuActuelle,
+			IdentifiantDeFeuilleDeScoreActuelle,			
+			ReglesPossiblesActuellesPourLeJoueur, 
+			PointsActuels,
+			
+Méthodes :  lancerDes(),
+			choisirDesAConserver(),
+			choisirFigure(),
+			MarquerFigure(),
+			calculerScore()
+
+TourDeJeu :
+Attributs : DesLances, DesAConserver, CombinaisonSelection,
+			GainsPossibles, GainsRealises,
+			NumeroDeTour,
+			PointsTour
+			
+Méthodes :  lancerDes(),			
+			evaluerScoreFigures(),
+			proposerChoix()
+			marquerRegle(),
+			decisionJoueur()
+			calculerScoreJoueur(),			
+			attribuerScoreJoueurFeuilledeScore(),			
+			calculerScoreFindeTour(),
+			finDeTour(),			
+			
+FeuilleDeScore :
+Attributs : UpperSection {1,2,3,4,5,6}
+			LowerSection {Yahtzee, Brelan, Carre, FullHouse, PetiteSuite, GrandeSuite, Chance, BonusYahtzee, JokerYahtzee}, 
+			TotalScore, Bonus,
+			UpperSectionTotal, LowerSectionTotal,
+			CombinedTotal, GrandTotal,
+			ReglesMarquesActuelles,
+						
+Méthodes :  calculerBonus(),
+			calculerTotal(),
+			calculerCombinedTotal(),
+			calculerGrandTotal(),
+			TermineFeuilledeScore(),
+			verifierRegle()			
+			
+TabledeRegles
+Attributs:
+		numeroRegle,		
+		1 {Nombre de dés affichant la valeur 1(somme des valeurs des dés)},
+		2 {Nombre de dés affichant la valeur 2(somme des valeurs des dés)},
+		3 {Nombre de dés affichant la valeur 3(somme des valeurs des dés)},
+		4 {Nombre de dés affichant la valeur 4(somme des valeurs des dés)},
+		5 {Nombre de dés affichant la valeur 5(somme des valeurs des dés)},
+		6 {Nombre de dés affichant la valeur 6(somme des valeurs des dés)},
+		Yahtzee { Tous les dés affichent la même valeur (50 points)},
+		Brelan { Trois dés affichent la même valeur (Somme des dés)},
+		Carre  { Quatre dés affichent la même valeur (Somme des dés)},
+		FullHouse { Un brelan et une paire (25 points)},
+		PetiteSuite { Quatre dés se suivent (30 points)},
+		GrandeSuite { Cinq dés se suivent (40 points)},
+		Chance { Somme des dés de n'importe quelle combinaison},
+		Bonus Yahtzee { Un Yahtzee supplémentaire après avoir déjà marqué un Yahtzee (100 points)},
+		Joker Yahtzee {Si deux Yahtzee ou plus sont réalisés, le joueur peut utiliser cette combinaison comme une chance}			
+Methodes
+		ajouterRegle(),
+		supprimerRegle()
+		
+Relations :
+
+une Jeu est composée de 0 à n joueurs
+une Jeu est composée de 3 ToursDeJeu
+une Jeu est associée a des TablesdeRegles
+une FeuilledeScore est affectée par joueur au sein d'une Jeu
+Un De est composé de 6 faces
+
+
+Associations :
+
+YahtzeeGame - Joueur : Agrégation (Les joueurs font Jeu du jeu, mais peuvent changer entre les Jeux.)
+YahtzeeGame - ReglesYahtzee : Composition (Les règles sont spécifiques à un jeu de Yahtzee.)
+
+Joueur - FeuilleDeScore : Composition (La feuille de score est dépendante du joueur.)
+Joueur - GainsPossibles : Composition (Les gains possibles sont dépendants du joueur.)
+
+TourDeJeu - De : Agrégation (Les dés sont utilisés dans un tour, mais peuvent être réutilisés.)
+TourDeJeu - Joueur : Composition (Le tour de jeu est dépendant du joueur.)
+TourDeJeu - GainsPossibles : Composition (Les gains possibles dépendent du tour de jeu.)
+
+Flux de Traitement :
+
+Objectif : Accumuler le plus de points possible en réalisant des combinaisons avec 5 dés.
+
+Déroulement d'un Tour de Jeu :
+
+a. Lancer des Dés :
+
+Le joueur lance les 5 dés.
+Il peut relancer les dés jusqu'à 3 fois pendant son tour.
+b. Choix des Dés :
+
+Après chaque lancer, le joueur décide quels dés il souhaite conserver et quels dés il souhaite relancer.
+Il peut choisir de relancer tous les dés ou seulement une Jeu.
+c. Réalisation d'une Combinaison :
+
+Le joueur doit réaliser une combinaison avec les résultats des dés.
+Des règles spécifiques au Yahtzee déterminent quelles combinaisons sont valides.
+d. Notation du Score et Attributions de Gains :
+
+Le joueur note le score de sa combinaison sur la feuille de score.
+Il attribue également les gains associés à sa combinaison (Bonus, Points spéciaux, etc.).
+e. Fin du Tour :
+
+Le joueur passe les dés, la feuille de score, et les gains possibles à son adversaire.
+Le tour de jeu continue avec le joueur suivant.
+
+Fin de la Jeu :
+
+La Jeu se termine après un nombre prédéfini de tours ou lorsque tous les joueurs ont complété leur feuille de score.
+Le joueur avec le score total le plus élevé a gagné.
